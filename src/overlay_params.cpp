@@ -751,12 +751,16 @@ parse_overlay_config(struct overlay_params *params,
       // Get config options
       parseConfigFile(*params);
 
-      if (!use_existing_preset && params->options.find("preset") != params->options.end()) {
-        auto presets = parse_preset(params->options.find("preset")->second.c_str());
-        if (!presets.empty())
-          params->preset = presets;
+      if (!use_existing_preset) {
+         if (params->options.find("preset") != params->options.end()) {
+            auto presets = parse_preset(params->options.find("preset")->second.c_str());
+            if (!presets.empty())
+               params->preset = presets;
+         }
         current_preset = params->preset[0];
       }
+
+      printf("Current preset: %d\n", current_preset);
 
       presets(current_preset, params);
 
